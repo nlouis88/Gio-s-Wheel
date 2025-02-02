@@ -147,32 +147,30 @@
         </div>
     </div>
 
-    <audio id="box-sound" src="https://docs.google.com/uc?export=download&id=1OI2F_gPYxtkMdG1tyYutKZ1hp4RZDwI8"></audio>
+    <audio id="ding-sound" src="ding.mp3"></audio>
 
     <script>
-        let maxNumber = 0;
         let boxes = [];
         let selectedLetter = "";
 
-        function selectNumber(num) {
-            const coordinates = {
-                1: { top: "38.5%", left: "45.8%" },
-                2: { top: "38.5%", left: "51.6%" },
-                3: { top: "38.5%", left: "40.1%" },
-                4: { top: "38.5%", left: "57.4%" },
-                5: { top: "38.5%", left: "34.3%" },
-                6: { top: "38.5%", left: "63.0%" },
-                7: { top: "38.5%", left: "28.6%" },
-                8: { top: "38.5%", left: "68.7%" },
-                9: { top: "38.5%", left: "22.9%" }
-            };
+        const coordinates = {
+            1: { top: "38.5%", left: "45.8%" },
+            2: { top: "38.5%", left: "51.6%" },
+            3: { top: "38.5%", left: "40.1%" },
+            4: { top: "38.5%", left: "57.4%" },
+            5: { top: "38.5%", left: "34.3%" },
+            6: { top: "38.5%", left: "63.0%" },
+            7: { top: "38.5%", left: "28.6%" },
+            8: { top: "38.5%", left: "68.7%" },
+            9: { top: "38.5%", left: "22.9%" }
+        };
 
-            maxNumber = Math.max(maxNumber, num);
+        function selectNumber(num) {
             const container = document.getElementById("box-container");
             container.innerHTML = "";
             boxes = [];
 
-            for (let i = 1; i <= maxNumber; i++) {
+            for (let i = 1; i <= num; i++) {
                 const { top, left } = coordinates[i];
                 const box = document.createElement("div");
                 box.className = "box";
@@ -189,15 +187,15 @@
 
             selectedLetter = letter;
             let delay = 0;
-            const sound = document.getElementById("box-sound");
+            const dingSound = document.getElementById("ding-sound");
 
             boxes.forEach((box, index) => {
                 setTimeout(() => {
                     box.style.backgroundColor = "blue";
-                    sound.currentTime = 0;
-                    sound.play();
+                    dingSound.currentTime = 0;
+                    dingSound.play();
                 }, delay);
-                delay += 525;
+                delay += 925;
             });
         }
 
@@ -205,9 +203,15 @@
             if (box.style.backgroundColor === "blue") {
                 box.style.backgroundColor = "white";
                 box.innerText = selectedLetter;
-            } else {
-                box.style.backgroundColor = "blue";
-                box.innerText = "";
+                checkForClear();
+            }
+        }
+
+        function checkForClear() {
+            if (boxes.every(box => box.innerText !== "")) {
+                setTimeout(() => {
+                    document.getElementById("box-container").innerHTML = "";
+                }, 10000);
             }
         }
     </script>
